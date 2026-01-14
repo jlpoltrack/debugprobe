@@ -6,6 +6,7 @@
 
 #include "tusb_edpt_handler.h"
 #include "DAP.h"
+#include "status_led.h"
 
 static uint8_t itf_num;
 static uint8_t _rhport;
@@ -236,6 +237,7 @@ void dap_thread(void *ptr)
 			}
 
 			_resp_len = DAP_ExecuteCommand(DAPRequestBuffer, DAPResponseBuffer);
+			status_led_activity();
 			probe_info("%lu %lu DAP resp %s\n",
 					USBResponseBuffer.wptr, USBResponseBuffer.rptr,
 					dap_cmd_string[DAPResponseBuffer[0]]);

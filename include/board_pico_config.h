@@ -45,6 +45,10 @@
 
 #define PROBE_USB_CONNECTED_LED 25
 
+// ws2812 status led configuration
+#define PROBE_STATUS_LED_PIN 16
+#define PROBE_STATUS_LED_WS2812 1
+
 #define PROBE_PRODUCT_STRING "Debugprobe on Pico (CMSIS-DAP)"
 
 #endif

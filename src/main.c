@@ -46,6 +46,7 @@
 #include "tusb_edpt_handler.h"
 #include "DAP.h"
 #include "hardware/structs/usb.h"
+#include "status_led.h"
 
 // UART0 for debugprobe debug
 // UART1 for debugprobe to target device
@@ -135,6 +136,7 @@ int main(void) {
     stdio_uart_init();
 
     DAP_Setup();
+    status_led_init();
 
     probe_info("Welcome to debugprobe!\n");
 
@@ -253,6 +255,7 @@ void tud_resume_cb(void)
 void tud_unmount_cb(void)
 {
   probe_info("Disconnected\n");
+  status_led_set_state(STATUS_LED_USB_CONNECTED);
   vTaskSuspend(uart_taskhandle);
   vTaskSuspend(dap_taskhandle);
   vTaskDelete(uart_taskhandle);
@@ -267,6 +270,7 @@ void tud_unmount_cb(void)
 void tud_mount_cb(void)
 {
   probe_info("Connected, Configured\n");
+  status_led_set_state(STATUS_LED_USB_CONNECTED);
   if (!was_configured) {
     /* UART needs to preempt USB as if we don't, characters get lost */
     xTaskCreate(cdc_thread, "UART", configMINIMAL_STACK_SIZE, NULL, UART_TASK_PRIO, &uart_taskhandle);

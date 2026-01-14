@@ -50,6 +50,7 @@ This information includes:
 #include "cmsis_compiler.h"
 #include "probe_config.h"
 #include "probe.h"
+#include "status_led.h"
 
 /// Processor Clock of the Cortex-M MCU used in the Debug Unit.
 /// This value is used to calculate the SWD/JTAG clock speed.
@@ -506,6 +507,13 @@ __STATIC_INLINE void LED_CONNECTED_OUT (uint32_t bit) {
 #ifdef PROBE_DAP_CONNECTED_LED
   gpio_put(PROBE_DAP_CONNECTED_LED, bit);
 #endif
+#ifdef PROBE_STATUS_LED_WS2812
+  if (bit) {
+    status_led_set_state(STATUS_LED_DAP_CONNECTED);
+  } else {
+    status_led_set_state(STATUS_LED_USB_CONNECTED);
+  }
+#endif
 }
 
 /** Debug Unit: Set status Target Running LED.
@@ -516,6 +524,13 @@ __STATIC_INLINE void LED_CONNECTED_OUT (uint32_t bit) {
 __STATIC_INLINE void LED_RUNNING_OUT (uint32_t bit) {
 #ifdef PROBE_DAP_RUNNING_LED
   gpio_put(PROBE_DAP_RUNNING_LED, bit);
+#endif
+#ifdef PROBE_STATUS_LED_WS2812
+  if (bit) {
+    status_led_set_state(STATUS_LED_DAP_RUNNING);
+  } else {
+    status_led_set_state(STATUS_LED_DAP_CONNECTED);
+  }
 #endif
 }
 
